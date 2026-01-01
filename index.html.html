@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Countdown</title>
+
+  <!-- Simple, clean font similar to the example -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      /* 🔽 BACKGROUND IMAGE PLACEHOLDER */
+      background-image: url("background.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    /* Optional subtle dark overlay for readability */
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+    }
+
+    .wrapper {
+      position: relative;
+      text-align: center;
+    }
+
+    .caption {
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+      opacity: 0.85;
+    }
+
+    .timer {
+      font-size: 120px;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    @media (max-width: 768px) {
+      .timer {
+        font-size: 72px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <!-- 🔽 CAPTION TEXT -->
+    <div class="caption">Momento de vernos</div>
+
+    <div id="timer" class="timer">Loading...</div>
+  </div>
+
+<script>
+  function getTargetDate() {
+    const now = new Date();
+    const year = now.getUTCFullYear();
+
+    // Jan 2, 16:00 UTC-6 = 22:00 UTC
+    let target = new Date(Date.UTC(year, 0, 2, 22, 0, 0));
+
+    if (now > target) {
+      target = new Date(Date.UTC(year + 1, 0, 2, 22, 0, 0));
+    }
+
+    return target;
+  }
+
+  const targetDate = getTargetDate();
+
+  function updateTimer() {
+    const now = new Date();
+    const diff = targetDate - now;
+
+    if (diff <= 0) {
+      document.getElementById("timer").textContent = "00:00:00";
+      return;
+    }
+
+    const seconds = Math.floor(diff / 1000) % 60;
+    const minutes = Math.floor(diff / (1000 * 60)) % 60;
+    const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    document.getElementById("timer").textContent =
+      `${days}d ${hours.toString().padStart(2,"0")}:${minutes
+        .toString().padStart(2,"0")}:${seconds.toString().padStart(2,"0")}`;
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
+</script>
+
+</body>
+</html>
